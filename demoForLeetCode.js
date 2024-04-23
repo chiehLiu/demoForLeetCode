@@ -1,60 +1,36 @@
-class Node {
-  constructor (value, priority) {
-    this.value = value;
-    this.next = null;
-    this.priority = priority;
-  }
-}
-
-class PriorityQueue {
-  constructor () {
-    this.first = null;
+class Heap {
+  constructor() {
+    this.heapElements = [];
   }
 
-  // insert a new node
-  insert (value, priority) {
-    const newNode = new Node(value, priority);
+  insert(value) {
+    this.heapElements.push(value);
+    let currentElementIndex = this.heapElements.length - 1;
+    let parentElementIndex = Math.floor((currentElementIndex - 1) / 2);
 
-    // if the queue is empty or the new node has higher priority than the first node
-    if (!this.first || priority > this.first.priority) {
-
-      // the new node points to the first node
-      newNode.next = this.first;
-
-      // update the first node
-      this.first = newNode;
-    } else {
-      let currentNode = this.first;
-
-      // find the right place to insert the new node, based on the priority value of the nodes in the queue
-      while (currentNode.next && priority < currentNode.next.priority) {
-        // move to the next node
-        currentNode = currentNode.next;
-      }
-      
-      // insert the new node
-      newNode.next = currentNode.next;
-      // update the next node of the current node
-      currentNode.next = newNode;
+    while (
+      parentElementIndex >= 0 &&
+      this.heapElements[currentElementIndex] > this.heapElements[parentElementIndex]
+    ) {
+      const parentElement = this.heapElements[parentElementIndex];
+      this.heapElements[parentElementIndex] = this.heapElements[currentElementIndex];
+      this.heapElements[currentElementIndex] = parentElement;
+      currentElementIndex = parentElementIndex;
+      parentElementIndex = Math.floor((currentElementIndex - 1) / 2);
     }
   }
-
-  // return and remove the first node
-  process () {
-    const first = this.first;
-    this.first = this.first.next;
-    return first;
-  }
 }
 
-const queue = new PriorityQueue();
+const heap = new Heap();
 
-queue.insert('clean', 1);
-queue.insert('do tax', 100);
-queue.insert('learn to code', 1000);
 
-console.log(queue);
+heap.insert(40);
+heap.insert(101);
+heap.insert(197);
+heap.insert(12);
+heap.insert(15);
+heap.insert(85);
+heap.insert(250);
 
-console.log(queue.process());
-console.log(queue.process());
-console.log(queue.process());
+
+console.log("🚀 ~ heap:", heap)
